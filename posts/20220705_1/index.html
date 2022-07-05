@@ -1,100 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-    <meta charset="UTF-8" />
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
 
-    <meta name="generator" content="Hugo 0.101.0" /><meta name="theme-color" content="" />
-    <meta name="color-scheme" content="light dark">
 
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
-    
-    <meta http-equiv="Cache-Control" content="no-transform" />
-    
-    <meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self'; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdn.jsdelivr.net/; prefetch-src 'self'; connect-src 'self' https://www.google-analytics.com;">
 
-    <title>DTO, VO, Entity의 구분 | dw.ko&#39;s TIL</title>
 
-    <link rel="stylesheet" href="/scss/main.scss" />
 
-    
-    
-        <script src="/js/meme.min.js"></script>
 
-    
+<meta name="author" content="dw.ko">
+<meta name="description" content="DTO, VO, Entity의 구분 1. DTO (Data Transfer Object) 말 그대로 데이터를 전송하기위한 객체. 주로 View 와 Controller 사이에서 데이터를 주고 받을 때, 사용한다. DTO는 getter / setter 메소드 외의 비즈니스 로직은 포함하지 않는다. 생성자 초기화 방식을 사용하면 불변 객체로 활용하여, 데이터 전달 과정에서 변조 위험을 없앨 수 있다. 2. VO (Value Object) 값 자체를 표현하는 객체. 각 객체의 주소가 달라도, 값이 같으면 동일한 것으로 여긴다. getter 메소드와 함께, 비즈니스 로직을 포함할 수 있다.">
+<meta name="keywords" content="blog,developer">
 
-    
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="DTO, VO, Entity의 구분"/>
+<meta name="twitter:description" content="DTO, VO, Entity의 구분 1. DTO (Data Transfer Object) 말 그대로 데이터를 전송하기위한 객체. 주로 View 와 Controller 사이에서 데이터를 주고 받을 때, 사용한다. DTO는 getter / setter 메소드 외의 비즈니스 로직은 포함하지 않는다. 생성자 초기화 방식을 사용하면 불변 객체로 활용하여, 데이터 전달 과정에서 변조 위험을 없앨 수 있다. 2. VO (Value Object) 값 자체를 표현하는 객체. 각 객체의 주소가 달라도, 값이 같으면 동일한 것으로 여긴다. getter 메소드와 함께, 비즈니스 로직을 포함할 수 있다."/>
 
-    <meta name="author" content="" /><meta name="description" content="DTO, VO, Entity의 구분 1. DTO (Data Transfer Object) 말 그대로 데이터를 전송하기위한 객체. 주로 View 와 Controller 사이에서 데이터를 주고 받을 때, 사용한다. DTO는 getter / setter 메소드 외의 비즈니스 로직은 포함하지 않는다. 생성자 초기화 방식을 사용하면 불변 객체로 활용하여, 데이터 전달 과정에서 변조 위험을 없앨 수 있다. 2. VO (Value Object) 값 자체를 표현하는 객체. 각 객체의 주소가 달라도, 값이 같으면 동일한 것으로 여긴다. getter 메소드와 함께, 비즈니스 로직을 포함할 수 있다." />
+<meta property="og:title" content="DTO, VO, Entity의 구분" />
+<meta property="og:description" content="DTO, VO, Entity의 구분 1. DTO (Data Transfer Object) 말 그대로 데이터를 전송하기위한 객체. 주로 View 와 Controller 사이에서 데이터를 주고 받을 때, 사용한다. DTO는 getter / setter 메소드 외의 비즈니스 로직은 포함하지 않는다. 생성자 초기화 방식을 사용하면 불변 객체로 활용하여, 데이터 전달 과정에서 변조 위험을 없앨 수 있다. 2. VO (Value Object) 값 자체를 표현하는 객체. 각 객체의 주소가 달라도, 값이 같으면 동일한 것으로 여긴다. getter 메소드와 함께, 비즈니스 로직을 포함할 수 있다." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://guyko91.github.io/posts/20220705_1/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-05T11:12:34+09:00" />
+<meta property="article:modified_time" content="2022-07-05T11:12:34+09:00" />
 
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="dw.ko&#39;s TIL" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="application-name" content="dw.ko&#39;s TIL" />
-    <meta name="msapplication-starturl" content="../../" />
-    <meta name="msapplication-TileColor" content="" />
-    <meta name="msapplication-TileImage" content="../../icons/mstile-150x150.png" />
-    <link rel="manifest" href="/manifest.json" />
 
-    
-    
 
-    
-    <link rel="canonical" href="https://guyko91.github.io/posts/20220705_1/" />
-    
 
-    
-    
+  <title>dw.ko&#39;s TIL</title>
 
-    
-    
+  
+  <link rel="canonical" href="https://guyko91.github.io/posts/20220705_1/">
+  
 
+  <link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
+
+
+  
+  
+  <link rel="stylesheet" href="/css/coder.min.6b1a4fbc48955b72aea7913e43fabeb45e8bc120da5aa41b598dd33adcac4b59.css" integrity="sha256-axpPvEiVW3Kup5E&#43;Q/q&#43;tF6LwSDaWqQbWY3TOtysS1k=" crossorigin="anonymous" media="screen" />
+
+
+
+
+
+  
+  
     
+    
+    <link rel="stylesheet" href="/css/coder-dark.min.39e41a7f16bdf8cb16e43cae7d714fa1016f1d2d2898a5b3f27f42c9979204e2.css" integrity="sha256-OeQafxa9&#43;MsW5DyufXFPoQFvHS0omKWz8n9CyZeSBOI=" crossorigin="anonymous" media="screen" />
+  
+
+
+
+   
+
+
+
+
+  <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
+
+
+  
+
+  <meta name="generator" content="Hugo 0.101.0" />
+
+
+  
+
 </head>
 
-    <body>
-        <div class="container">
-            
 
 
 
-            
-                
-                
-                
-            
-            
-    <main class="main single" id="main">
-    <div class="main-inner">
 
+
+
+<body class="preload-transitions colorscheme-auto">
+  
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+  <main class="wrapper">
+    <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      dw.ko&#39;s TIL
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
         
-
-        <article class="content post h-entry" data-align="default" data-type="posts">
-
-            <h1 class="post-title p-name">DTO, VO, Entity의 구분</h1>
-
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/posts/">Blog</a>
+            </li>
+          
+        
+        
+          
+          
+          
             
-
+          
             
-
+              
+                <li class="navigation-item menu-separator">
+                  <span>|</span>
+                </li>
+                
+              
+              <li class="navigation-item">
+                <a href="https://guyko91.github.io/kr/">🇰🇷</a>
+              </li>
             
+          
+        
+      </ul>
+    
+  </section>
+</nav>
 
-            <div class="post-body e-content">
-                <h1 id="dto-vo-entity의-구분">DTO, VO, Entity의 구분</h1>
-<h2 id="1-dto-data-transfer-object">1. DTO (Data Transfer Object)</h2>
+
+    <div class="content">
+      
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://guyko91.github.io/posts/20220705_1/">
+              DTO, VO, Entity의 구분
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime="2022-07-05T11:12:34&#43;09:00">
+                July 5, 2022
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              One-minute read
+            </span>
+          </div>
+          
+          
+          
+        </div>
+      </header>
+
+      <div>
+        
+        <h1 id="dto-vo-entity의-구분">
+  DTO, VO, Entity의 구분
+  <a class="heading-link" href="#dto-vo-entity%ec%9d%98-%ea%b5%ac%eb%b6%84">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h1>
+<h2 id="1-dto-data-transfer-object">
+  1. DTO (Data Transfer Object)
+  <a class="heading-link" href="#1-dto-data-transfer-object">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <ul>
 <li>말 그대로 데이터를 전송하기위한 객체.</li>
 <li>주로 View 와 Controller 사이에서 데이터를 주고 받을 때, 사용한다.</li>
 <li>DTO는 getter / setter 메소드 외의 비즈니스 로직은 포함하지 않는다.</li>
 <li>생성자 초기화 방식을 사용하면 불변 객체로 활용하여, 데이터 전달 과정에서 변조 위험을 없앨 수 있다.</li>
 </ul>
-<h2 id="2-vo-value-object">2. VO (Value Object)</h2>
+<h2 id="2-vo-value-object">
+  2. VO (Value Object)
+  <a class="heading-link" href="#2-vo-value-object">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <ul>
 <li>값 자체를 표현하는 객체.</li>
 <li>각 객체의 주소가 달라도, 값이 같으면 동일한 것으로 여긴다.</li>
@@ -104,15 +208,25 @@
 </ul>
 </li>
 </ul>
-<h2 id="3-entity">3. Entity</h2>
+<h2 id="3-entity">
+  3. Entity
+  <a class="heading-link" href="#3-entity">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <ul>
 <li>실제 DB 테이블과 매핑되는 객체.</li>
 <li>이를 기준으로 테이블이 생성되고, 스키마가 변경된다.</li>
 <li>Entity를 요청이나 응답 값을 전달하는 클래스로 사용하며 안 된다.</li>
 <li>마이바티스를 사용할 때에는 사용되지 않는다.</li>
 </ul>
-<h2 id="4-종합">4. 종합</h2>
-<div class="table-container"><table>
+<h2 id="4-종합">
+  4. 종합
+  <a class="heading-link" href="#4-%ec%a2%85%ed%95%a9">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<table>
 <thead>
 <tr>
 <th>분류</th>
@@ -141,70 +255,65 @@
 <td>가능</td>
 </tr>
 </tbody>
-</table></div>
+</table>
 
-            </div>
-
-            
+      </div>
 
 
-        </article>
-
-        
-
+      <footer>
         
 
 
         
-
-
         
-
-
         
+      </footer>
+    </article>
 
-
-        
-
-
-        
-
-
-        
-
-
-        
-
-
-        
-
+    
+  </section>
 
     </div>
-</main>
 
+    <footer class="footer">
+  <section class="container">
+    ©
+    
+      2019 -
+    
+    2022
+     dw.ko 
+    ·
+    
+    Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+  </section>
+</footer>
 
-            
+  </main>
 
-            
+  
+  
+  <script src="/js/coder.min.236049395dc3682fb2719640872958e12f1f24067bb09c327b233e6290c7edac.js" integrity="sha256-I2BJOV3DaC&#43;ycZZAhylY4S8fJAZ7sJwyeyM&#43;YpDH7aw="></script>
+  
 
-        </div>
-        
+  
 
-        
+  
 
+  
 
+  
 
+  
 
+  
 
+  
 
+  
 
+  
+</body>
 
-
-
-
-
-
-
-
-    </body>
 </html>
