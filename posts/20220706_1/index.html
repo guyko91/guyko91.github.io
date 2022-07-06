@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+
+
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self'; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdn.jsdelivr.net/; prefetch-src 'self'; connect-src 'self' https://www.google-analytics.com;">
+
+
+
+
+<meta name="author" content="dw.ko">
+<meta name="description" content="출처: 우아한테크 세미나 (https://www.youtube.com/watch?v=ssDMIcPBqUE)
+왜 코드 리뷰를 해야 하나 ? 우리가 살고 있는 세상 (끊임없이 변하는 세상) VUCA 시대 Volatility (변동성) Uncertainty (불확실성) Complexity (복잡성) Ambiguity (모호성) 개발은 DRFR (Delever SW Rapidly, Frequently and more Reliably) 개발조직의 성능(생산성)이 중요해졌다. 릴리즈를 할 때 마다 개발 리소스가 증가한다. 생산성은 리소스가 증가함에 따라 증가하다가 어느정도 수준이 되면 멈춘다. 생산성은 릴리즈 때 마다 계속 떨어진다. (기술부채 때문) SW 공학의 특성 (다른 공학과의 차이점) 공학 활동의 최종 목적 : 재생산 가능한 문서 (누가 빌드하든 같은 결과물이 나올 수 있도록) SW 공학의 설계와 빌드 설계 : 완전한 소스 코드 SW 빌드 : 컴파일 좋은 설계 = 클린코드 SW 엔지니어 : 설계를 잘하는 사람 → 코드를 잘 작성하는 사람.">
+<meta name="keywords" content="blog,developer">
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="지속 가능한 SW 개발을 위한 코드리뷰"/>
+<meta name="twitter:description" content="출처: 우아한테크 세미나 (https://www.youtube.com/watch?v=ssDMIcPBqUE)
+왜 코드 리뷰를 해야 하나 ? 우리가 살고 있는 세상 (끊임없이 변하는 세상) VUCA 시대 Volatility (변동성) Uncertainty (불확실성) Complexity (복잡성) Ambiguity (모호성) 개발은 DRFR (Delever SW Rapidly, Frequently and more Reliably) 개발조직의 성능(생산성)이 중요해졌다. 릴리즈를 할 때 마다 개발 리소스가 증가한다. 생산성은 리소스가 증가함에 따라 증가하다가 어느정도 수준이 되면 멈춘다. 생산성은 릴리즈 때 마다 계속 떨어진다. (기술부채 때문) SW 공학의 특성 (다른 공학과의 차이점) 공학 활동의 최종 목적 : 재생산 가능한 문서 (누가 빌드하든 같은 결과물이 나올 수 있도록) SW 공학의 설계와 빌드 설계 : 완전한 소스 코드 SW 빌드 : 컴파일 좋은 설계 = 클린코드 SW 엔지니어 : 설계를 잘하는 사람 → 코드를 잘 작성하는 사람."/>
+
+<meta property="og:title" content="지속 가능한 SW 개발을 위한 코드리뷰" />
+<meta property="og:description" content="출처: 우아한테크 세미나 (https://www.youtube.com/watch?v=ssDMIcPBqUE)
+왜 코드 리뷰를 해야 하나 ? 우리가 살고 있는 세상 (끊임없이 변하는 세상) VUCA 시대 Volatility (변동성) Uncertainty (불확실성) Complexity (복잡성) Ambiguity (모호성) 개발은 DRFR (Delever SW Rapidly, Frequently and more Reliably) 개발조직의 성능(생산성)이 중요해졌다. 릴리즈를 할 때 마다 개발 리소스가 증가한다. 생산성은 리소스가 증가함에 따라 증가하다가 어느정도 수준이 되면 멈춘다. 생산성은 릴리즈 때 마다 계속 떨어진다. (기술부채 때문) SW 공학의 특성 (다른 공학과의 차이점) 공학 활동의 최종 목적 : 재생산 가능한 문서 (누가 빌드하든 같은 결과물이 나올 수 있도록) SW 공학의 설계와 빌드 설계 : 완전한 소스 코드 SW 빌드 : 컴파일 좋은 설계 = 클린코드 SW 엔지니어 : 설계를 잘하는 사람 → 코드를 잘 작성하는 사람." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://guyko91.github.io/posts/20220706_1/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-06T21:40:34+09:00" />
+<meta property="article:modified_time" content="2022-07-06T21:40:34+09:00" />
+
+
+
+
+  <title>dw.ko&#39;s TIL</title>
+
+  
+  <link rel="canonical" href="https://guyko91.github.io/posts/20220706_1/">
+  
+
+  <link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
+
+
+  
+  
+  <link rel="stylesheet" href="/css/coder.min.6b1a4fbc48955b72aea7913e43fabeb45e8bc120da5aa41b598dd33adcac4b59.css" integrity="sha256-axpPvEiVW3Kup5E&#43;Q/q&#43;tF6LwSDaWqQbWY3TOtysS1k=" crossorigin="anonymous" media="screen" />
+
+
+
+
+
+  
+  
+    
+    
+    <link rel="stylesheet" href="/css/coder-dark.min.39e41a7f16bdf8cb16e43cae7d714fa1016f1d2d2898a5b3f27f42c9979204e2.css" integrity="sha256-OeQafxa9&#43;MsW5DyufXFPoQFvHS0omKWz8n9CyZeSBOI=" crossorigin="anonymous" media="screen" />
+  
+
+
+
+   
+
+
+
+
+  <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
+
+
+  
+
+  <meta name="generator" content="Hugo 0.101.0" />
+
+
+  
+
+</head>
+
+
+
+
+
+
+
+<body class="preload-transitions colorscheme-auto">
+  
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+  <main class="wrapper">
+    <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      dw.ko&#39;s TIL
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/posts/">Blog</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+    <div class="content">
+      
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://guyko91.github.io/posts/20220706_1/">
+              지속 가능한 SW 개발을 위한 코드리뷰
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime="2022-07-06T21:40:34&#43;09:00">
+                July 6, 2022
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              4-minute read
+            </span>
+          </div>
+          
+          
+          
+        </div>
+      </header>
+
+      <div>
+        
+        <p>출처: 우아한테크 세미나 (<a href="https://www.youtube.com/watch?v=ssDMIcPBqUE">https://www.youtube.com/watch?v=ssDMIcPBqUE</a>)</p>
+<h1 id="왜-코드-리뷰를-해야-하나-">
+  왜 코드 리뷰를 해야 하나 ?
+  <a class="heading-link" href="#%ec%99%9c-%ec%bd%94%eb%93%9c-%eb%a6%ac%eb%b7%b0%eb%a5%bc-%ed%95%b4%ec%95%bc-%ed%95%98%eb%82%98-">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h1>
+<h2 id="우리가-살고-있는-세상-끊임없이-변하는-세상">
+  우리가 살고 있는 세상 (끊임없이 변하는 세상)
+  <a class="heading-link" href="#%ec%9a%b0%eb%a6%ac%ea%b0%80-%ec%82%b4%ea%b3%a0-%ec%9e%88%eb%8a%94-%ec%84%b8%ec%83%81-%eb%81%8a%ec%9e%84%ec%97%86%ec%9d%b4-%eb%b3%80%ed%95%98%eb%8a%94-%ec%84%b8%ec%83%81">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<ul>
+<li>VUCA 시대
+<ul>
+<li>Volatility (변동성)</li>
+<li>Uncertainty (불확실성)</li>
+<li>Complexity (복잡성)</li>
+<li>Ambiguity (모호성)</li>
+</ul>
+</li>
+<li>개발은 DRFR (Delever SW Rapidly, Frequently and more Reliably)
+<ul>
+<li>개발조직의 성능(생산성)이 중요해졌다.</li>
+</ul>
+</li>
+<li>릴리즈를 할 때 마다 개발 리소스가 증가한다.
+<ul>
+<li>생산성은 리소스가 증가함에 따라 증가하다가 어느정도 수준이 되면 멈춘다.</li>
+<li>생산성은 릴리즈 때 마다 계속 떨어진다. (기술부채 때문)</li>
+</ul>
+</li>
+<li>SW 공학의 특성 (다른 공학과의 차이점)
+<ul>
+<li>공학 활동의 최종 목적 : 재생산 가능한 문서 (누가 빌드하든 같은 결과물이 나올 수 있도록)</li>
+<li>SW 공학의 설계와 빌드
+<ul>
+<li>설계 : 완전한 소스 코드</li>
+<li>SW 빌드 : 컴파일</li>
+</ul>
+</li>
+<li>좋은 설계 = 클린코드</li>
+<li>SW 엔지니어 : 설계를 잘하는 사람 → <strong>코드를 잘 작성하는 사람.</strong></li>
+</ul>
+</li>
+<li>클린 코드의 중요성
+<ul>
+<li>SW의 진정한 비용은 유지보수 비용.</li>
+</ul>
+</li>
+</ul>
+<h2 id="코드리뷰란-">
+  코드리뷰란 ?
+  <a class="heading-link" href="#%ec%bd%94%eb%93%9c%eb%a6%ac%eb%b7%b0%eb%9e%80-">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<ul>
+<li><strong>개발자가 지금부터 당장 행할 수 있는 공유 활동</strong></li>
+<li><strong>Code SNS 댓글 놀이</strong></li>
+<li><strong>배움을 주고 받으며, 지속적으로 성장하는 SW 개발자가 될 수 있는 실천법</strong></li>
+</ul>
+<h2 id="코드-리뷰의-목적">
+  코드 리뷰의 목적
+  <a class="heading-link" href="#%ec%bd%94%eb%93%9c-%eb%a6%ac%eb%b7%b0%ec%9d%98-%eb%aa%a9%ec%a0%81">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<ul>
+<li>주 목적 : 품질 문제 검수 (버그, 장애)</li>
+<li>더 나은 코드 품질 : 아키텍처 속성 개선을 위한 코드 개선 (향후 변경 비용 개선)</li>
+<li>학습 및 지식 전달 : 코드, 해결책 등과 관련된 지식 공유에 기여
+<ul>
+<li>공유(주고 받는 학습)를 통한 역량 증대 및 성장
+<ul>
+<li>대개의 경우 리뷰어들도 리뷰 과정에서 지식을 얻게 됨 (하드스킬, 소프트스킬)</li>
+</ul>
+</li>
+<li><strong>동기부여</strong></li>
+</ul>
+</li>
+<li>상호 책임감 증대
+<ul>
+<li>집단 코드 오너십 및 <strong>결속</strong> 증대</li>
+<li>내가 하고 있는 일에 <strong>관심</strong>을 가져주는 것</li>
+<li>팀에서 일어나는 일 공유. 내 동료는 무엇을 하나 ? <strong>팀웍</strong></li>
+</ul>
+</li>
+<li>설계 개선 제안</li>
+<li>개발 문화 개선</li>
+</ul>
+<h1 id="코드리뷰가-왜-어려운가-">
+  코드리뷰가 왜 어려운가 ?
+  <a class="heading-link" href="#%ec%bd%94%eb%93%9c%eb%a6%ac%eb%b7%b0%ea%b0%80-%ec%99%9c-%ec%96%b4%eb%a0%a4%ec%9a%b4%ea%b0%80-">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h1>
+<h2 id="코드리뷰의-절차">
+  코드리뷰의 절차
+  <a class="heading-link" href="#%ec%bd%94%eb%93%9c%eb%a6%ac%eb%b7%b0%ec%9d%98-%ec%a0%88%ec%b0%a8">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<ul>
+<li>저자 (Author)
+<ul>
+<li>코드 작성, 리뷰 요청</li>
+</ul>
+</li>
+<li>리뷰어
+<ul>
+<li>코드를 읽고, 머지 가능한지 결정</li>
+</ul>
+</li>
+<li>변경 내역 (Change List, PR)
+<ul>
+<li>리뷰 시작 전에 작성</li>
+<li>저자가 머지를 원하는 소스 코드에 대한 일련의 변경에 대해 기술 (잘한 것, 아쉬운 것, 눈여겨볼 것)</li>
+</ul>
+</li>
+</ul>
+<h2 id="코드에-대한-비판을-자신에-대한-비판으로-이해">
+  코드에 대한 비판을 자신에 대한 비판으로 이해
+  <a class="heading-link" href="#%ec%bd%94%eb%93%9c%ec%97%90-%eb%8c%80%ed%95%9c-%eb%b9%84%ed%8c%90%ec%9d%84-%ec%9e%90%ec%8b%a0%ec%97%90-%eb%8c%80%ed%95%9c-%eb%b9%84%ed%8c%90%ec%9c%bc%eb%a1%9c-%ec%9d%b4%ed%95%b4">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<ul>
+<li>저자 : 본인 생각에 멋지다고 생각하는 PR을 보냄</li>
+<li>리뷰어 : 왜 멋지지 않은지에 대한 장황한 이유를 작성</li>
+<li>코드 토의를 개인적 공격으로 받아들이면 물거품이 된다.</li>
+</ul>
+<h1 id="기법들">
+  기법들
+  <a class="heading-link" href="#%ea%b8%b0%eb%b2%95%eb%93%a4">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h1>
+<h2 id="효율적인-pr-방법">
+  효율적인 PR 방법
+  <a class="heading-link" href="#%ed%9a%a8%ec%9c%a8%ec%a0%81%ec%9d%b8-pr-%eb%b0%a9%eb%b2%95">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<ul>
+<li>지루한 작업은 컴퓨터로 처리
+<ul>
+<li>단순 줄바꿈 띄워쓰기 같은 것은 별도의 commit으로 분리한다. (커밋 메시지에 설명 작성)</li>
+<li>unused improt, declaration 을 IDE 기능으로 에러처리하면 관련된 리뷰 시간을 줄일 수 있다.</li>
+</ul>
+</li>
+<li>스타일 가이드를 통해 스타일 논쟁을 해소 (형식을 만들어라)
+<ul>
+<li>옵션 1 : 이미 작성된 스타일 가이드가 있으면 가져다 쓰기</li>
+<li>옵션 2 : 점진적으로 스타일 형식을 만들어 가라</li>
+<li>옵션 3 : 옵션 1과 옵션 2를 짬뽕해서 써라</li>
+</ul>
+</li>
+<li>PR을 올릴 때 주석 달기
+<ul>
+<li>PR을 저자가 먼저 읽어보고, 리뷰어들을 위한 설명을 코멘트로 남겨서 리뷰어들의 시간을 절약할 수 있게 하라.</li>
+</ul>
+</li>
+<li>리뷰어에 모두를 포함하라
+<ul>
+<li>많은 사람이 볼 수록 버그를 더 잘 찾아낼 수 있다.</li>
+<li>많은 사람이 본다고 하면 <strong>더 잘하려고 하는 경향</strong>이 있다.</li>
+</ul>
+</li>
+<li>의미있는 커밋으로 분리 (커밋 단위 분리)</li>
+</ul>
+<h2 id="효율적인-리뷰-방법">
+  효율적인 리뷰 방법
+  <a class="heading-link" href="#%ed%9a%a8%ec%9c%a8%ec%a0%81%ec%9d%b8-%eb%a6%ac%eb%b7%b0-%eb%b0%a9%eb%b2%95">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<ul>
+<li>리뷰는 즉시 시작
+<ul>
+<li>코드 리뷰를 <strong>높은 우선순위</strong>로.
+<ul>
+<li>저자는 리뷰 종료될 때 까지 대기 (Blocked) 함.</li>
+</ul>
+</li>
+<li>리뷰를 바로 시작하면 <strong>선순환</strong> 됨.
+<ul>
+<li>코드를 읽고 피드백을 줄 때는 시간을 가지고 진행해도 되지만 <strong>시작은 바로 해라</strong></li>
+</ul>
+</li>
+<li>리뷰 라운드의 최대 시간은 하루
+<ul>
+<li>1일 내 불가하면 다른 리뷰어를 지정.</li>
+</ul>
+</li>
+<li>PR에 포함된 <strong>변경이 적도록</strong> 노력
+<ul>
+<li>반나절 정도 작업한 양 정도가 적당.</li>
+</ul>
+</li>
+<li>Pull Requests vs Pair Programming</li>
+</ul>
+</li>
+<li>고수준 → 저수준으로 내려가라
+<ul>
+<li>많은 의견을 남길 수록, 저자가 당황할 위험이 커진다.</li>
+<li>초기 라운드에는 고수준 피드백으로 제한
+<ul>
+<li>버그, 장애, 성능, 보안 등</li>
+<li>Extract Method, Composed Method, Invert-if(복잡도) 등</li>
+</ul>
+</li>
+<li>고수준 피드백 처리 완료 후에 저수준 이슈를 처리
+<ul>
+<li>(선택적인) 설계 개선</li>
+<li>변수명 변경, 주석을 명확하게 하는 것 등</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>예제 코드 제공에 관대하라
+<ul>
+<li>저자를 기분 좋게 하기 위한 방법
+<ul>
+<li>리뷰 중에 <strong>선물</strong> 주기 (코드 예제)</li>
+</ul>
+</li>
+<li>너무 긴 예제는 관대한 것이 아니라, 억압적으로 보인다.</li>
+<li>라운드 당 2~3개의 코드 예제로 제한
+<ul>
+<li>코드를 다 짜서 준다는 느낌으로 받아들일 수 있음.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>리뷰의 범위를 존중하라
+<ul>
+<li>PR에 포함되지 않은 라인은 리뷰 범위가 아니다!</li>
+<li>예외 : PR이 둘러싼 코드에 영향을 미칠 때,
+<ul>
+<li>EX) 함수 내에 특정 로직이 삭제되었는데, 함수명이 삭제된 로직이 포함되어 있다면, 함수명 수정이 필요하다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>태그를 활용하라
+<ul>
+<li>[Nit] → ‘고치면 좋지만 아니어도 그만&rsquo; 의 의미.</li>
+<li>교육적인 목적, 지속적으로 기술을 연마하는 것을 돕는 목적</li>
+</ul>
+</li>
+<li>한 두 등급만 코드 레벨을 올리는 것을 목표로 하라
+<ul>
+<li>완전하지는 않아도 충분히 좋은 코드가 되도록
+<ul>
+<li>기능적으로 틀렸거나</li>
+<li>너무 복잡해서 정합성에 확신이 없는 상태</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="피드백-방법">
+  피드백 방법
+  <a class="heading-link" href="#%ed%94%bc%eb%93%9c%eb%b0%b1-%eb%b0%a9%eb%b2%95">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<ul>
+<li>절대 “너&quot;라고 하지 마라
+<ul>
+<li>리뷰의 핵심은 “<strong>무엇이 코드를 나아지게 하는가</strong>”</li>
+<li>비판의 대상은 코드이지, 저자가 아니다.</li>
+</ul>
+</li>
+<li>건설적인 피드백을 하라
+<ul>
+<li>동료들 간의 코드 리뷰는 경쟁 유발이 아닌, 팀의 생산성을 높이는 것</li>
+<li>건설적인 피드백은 실수에서 배우고 역량을 증대시킨다</li>
+</ul>
+</li>
+<li>진정한 칭찬을 해라
+<ul>
+<li>대부분의 리뷰어가 <strong>잘못된 부분에만 집중</strong></li>
+</ul>
+</li>
+<li>피드백은 명령이 아니라 요청으로 표현해라
+<ul>
+<li>강압적인 명령형 어조보다는 요청으로 표현해라
+<ul>
+<li>~~ 하는게 어떨까요 ?</li>
+<li>~~ 하면 ~~하게될텐데 괜찮을까요 ?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>의견이 아니라 원칙에 기반하여 피드백하라
+<ul>
+<li>“<strong>제안하는 변경</strong>”과 “변경의 <strong>이유</strong>”를 모두 설명하라.</li>
+</ul>
+</li>
+<li>반복적인 패턴에 대해서 피드백을 제한하라
+<ul>
+<li>동일 패턴에 대해서는 2~3개 정도 예를 언급하라.</li>
+<li>그 이상은 저자에게 개별 사례가 아니라, 패턴에 대해서 수정을 요구하라.</li>
+</ul>
+</li>
+</ul>
+<h2 id="교착상태-시">
+  교착상태 시
+  <a class="heading-link" href="#%ea%b5%90%ec%b0%a9%ec%83%81%ed%83%9c-%ec%8b%9c">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<ul>
+<li>교착상태를 적극적으로 처리해라.
+<ul>
+<li>교착상태 ?
+<ul>
+<li>톤이 팽팽해지고 공격적으로 됨.</li>
+<li>커멘트가 줄어들지 않는 경향.</li>
+<li>너무 많은 커멘트에 저항이 보임.</li>
+</ul>
+</li>
+<li>만나서 얘기하라
+<ul>
+<li>화상 혹은 만나서 논의.</li>
+<li>텍스트 기반 의사소통은 상대가 인간이라는 것을 잊게 한다.</li>
+</ul>
+</li>
+<li>인정하거나 Escalate(to 상급자) 하라</li>
+<li>설계 리뷰를 고려해라.</li>
+</ul>
+</li>
+</ul>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+    </div>
+
+    <footer class="footer">
+  <section class="container">
+    ©
+    
+      2019 -
+    
+    2022
+     dw.ko 
+    ·
+    
+    Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+  </section>
+</footer>
+
+  </main>
+
+  
+  
+  <script src="/js/coder.min.236049395dc3682fb2719640872958e12f1f24067bb09c327b233e6290c7edac.js" integrity="sha256-I2BJOV3DaC&#43;ycZZAhylY4S8fJAZ7sJwyeyM&#43;YpDH7aw="></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+
+</html>

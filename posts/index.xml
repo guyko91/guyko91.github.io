@@ -6,7 +6,17 @@
     <description>Recent content in Posts on dw.ko&#39;s TIL</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 05 Jul 2022 11:12:34 +0900</lastBuildDate><atom:link href="https://guyko91.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 06 Jul 2022 21:40:34 +0900</lastBuildDate><atom:link href="https://guyko91.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>지속 가능한 SW 개발을 위한 코드리뷰</title>
+      <link>https://guyko91.github.io/posts/20220706_1/</link>
+      <pubDate>Wed, 06 Jul 2022 21:40:34 +0900</pubDate>
+      
+      <guid>https://guyko91.github.io/posts/20220706_1/</guid>
+      <description>출처: 우아한테크 세미나 (https://www.youtube.com/watch?v=ssDMIcPBqUE)
+왜 코드 리뷰를 해야 하나 ? 우리가 살고 있는 세상 (끊임없이 변하는 세상) VUCA 시대 Volatility (변동성) Uncertainty (불확실성) Complexity (복잡성) Ambiguity (모호성) 개발은 DRFR (Delever SW Rapidly, Frequently and more Reliably) 개발조직의 성능(생산성)이 중요해졌다. 릴리즈를 할 때 마다 개발 리소스가 증가한다. 생산성은 리소스가 증가함에 따라 증가하다가 어느정도 수준이 되면 멈춘다. 생산성은 릴리즈 때 마다 계속 떨어진다. (기술부채 때문) SW 공학의 특성 (다른 공학과의 차이점) 공학 활동의 최종 목적 : 재생산 가능한 문서 (누가 빌드하든 같은 결과물이 나올 수 있도록) SW 공학의 설계와 빌드 설계 : 완전한 소스 코드 SW 빌드 : 컴파일 좋은 설계 = 클린코드 SW 엔지니어 : 설계를 잘하는 사람 → 코드를 잘 작성하는 사람.</description>
+    </item>
+    
     <item>
       <title>DTO, VO, Entity의 구분</title>
       <link>https://guyko91.github.io/posts/20220705_1/</link>
